@@ -62,6 +62,6 @@ textarea:focus, input:focus, select:focus {
   color: #0E5AE5 !important;
 }
 
-.error-file {
+.error-file, .error-date {
   color: rgb(248, 69, 69);
 }

@@ -31,7 +31,7 @@ export default class NewBill {
       const email = JSON.parse(localStorage.getItem("user")).email
       formData.append('file', file)
       formData.append('email', email)
-
+      
       if(error) {
         error.remove();
       }
@@ -45,7 +45,6 @@ export default class NewBill {
           }
         })
         .then(({filePath, key, fileName}) => {
-          console.log(filePath, key, fileName)
           this.billId = key
           this.fileUrl = filePath
           this.fileName = fileName
@@ -63,9 +62,40 @@ export default class NewBill {
   }
   handleSubmit = e => {
     e.preventDefault()
+    const inputDate = e.target.querySelector(`input[data-testid="datepicker"]`)
+    const dateSelected = inputDate.value.split('-')
+    const daySelected = dateSelected[2]
+    const monthSelected = dateSelected[1]
+    const yearSelected = dateSelected[0]
+    const today = new Date()
+    const day = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+
+    let errorDate = this.document.querySelector('.error-date')
+
+    if(!errorDate) {
+      errorDate = this.document.createElement('p')
+      errorDate.textContent = 'Veuillez sélectionner une date précédent la date d\'ajourd\'hui'
+      errorDate.setAttribute('class', 'error-date')
+    }
+    
+    if (yearSelected > year) {
+      this.error = true
+    } else if (yearSelected == year && monthSelected > month) {
+      this.error = true    
+    } else if (yearSelected == year && monthSelected == month && daySelected > day) {
+      console.log('ok')
+      this.error = true
+    } else {
+      this.error = false
+    }
+
+    this.error ? inputDate.after(errorDate) : errorDate.remove()
+
+    console.log(this.error)
 
     if(!this.error) {
-      console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
       const email = JSON.parse(localStorage.getItem("user")).email
       const bill = {
         email,
