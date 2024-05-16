@@ -12,6 +12,8 @@ export default class NewBill {
     formNewBill.addEventListener("submit", this.handleSubmit)
     const file = this.document.querySelector(`input[data-testid="file"]`)
     file.addEventListener("change", this.handleChangeFile)
+    const date = this.document.querySelector(`input[data-testid="datepicker"]`)
+    date.addEventListener("change", this.handleChangeDate)
     this.fileUrl = null
     this.fileName = null
     this.billId = null
@@ -71,9 +73,8 @@ export default class NewBill {
     }
   }
 
-  handleSubmit = e => {
-    e.preventDefault()
-    const inputDate = e.target.querySelector(`input[data-testid="datepicker"]`)
+  handleChangeDate = e => {
+    const inputDate = this.document.querySelector(`input[data-testid="datepicker"]`)
     const dateSelected = inputDate.value.split('-')
     const daySelected = +dateSelected[2]
     const monthSelected = +dateSelected[1]
@@ -103,6 +104,10 @@ export default class NewBill {
     }
 
     this.errorDate ? inputDate.after(errorDate) : errorDate.remove()
+  }
+
+  handleSubmit = e => {
+    e.preventDefault()
 
     if(!this.errorDate && !this.errorFile) {
       const email = JSON.parse(localStorage.getItem("user")).email
