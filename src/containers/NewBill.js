@@ -52,6 +52,7 @@ export default class NewBill {
         error = this.document.createElement('p')
         error.textContent = 'Veuillez ajouter une image au format PNG, JPG ou JPEG'
         error.classList.add('error-file')
+        error.setAttribute('data-testid', 'errorFile')
         inputFile.after(error)
       }
   }
@@ -88,6 +89,7 @@ export default class NewBill {
       errorDate = this.document.createElement('p')
       errorDate.textContent = 'Veuillez sélectionner une date précédent la date d\'ajourd\'hui'
       errorDate.setAttribute('class', 'error-date')
+      errorDate.setAttribute('data-testid', 'errorDate')
     }
     
     if (yearSelected > year) {
