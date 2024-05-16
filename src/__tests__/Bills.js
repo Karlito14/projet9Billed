@@ -5,6 +5,8 @@
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
+import Bills from "../containers/Bills";
+import userEvent from "@testing-library/user-event";
 import { ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 
@@ -36,4 +38,43 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
+
+  describe("When I click on a eye icon", () => {
+    test("Then a modal should be display", () => {
+      Object.defineProperty(window, localStorage, {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({ type: "Employee" })
+      );
+
+      document.body.innerHTML = BillsUI({ data: bills });
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+
+      const bill = new Bills({
+        document,
+        onNavigate,
+        localStorage: localStorageMock,
+        store: null,
+      });
+
+      $.fn.modal = jest.fn();
+
+      const handleClickIconEye = jest.fn(() => {
+        bill.handleClickIconEye;
+      });
+      const eyeIcons = screen.getAllByTestId("icon-eye");
+
+      for (let eyeIcon of eyeIcons) {
+        handleClickIconEye(eyeIcon);
+        userEvent.click(eyeIcon);
+      }
+
+      expect(handleClickIconEye).toHaveBeenCalledTimes(eyeIcons.length);
+      expect($.fn.modal).toHaveBeenCalled();
+    });
+  });
 })
