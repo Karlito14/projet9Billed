@@ -15,6 +15,7 @@ const onNavigate = (pathname) => {
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
+    // test affichage page nouvelle note de frais
     test("Then the newBill should be render", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
@@ -23,6 +24,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  // test affichage message d'erreur lorsque l'utilisateur choisi un fichier avec la mauvaise extension
   describe("When I upload a file with invalid format", () => {
     test("Then it should display an error message", () => {
       document.body.innerHTML = NewBillUI();
@@ -52,10 +54,11 @@ describe("Given I am connected as an employee", () => {
     });
   });
 
+  // test affichae message erreur lorsque l'utilisateur choisi une mauvaise date
   describe("when I choose the wrong date", () => {
     test("Then it should display an error message", () => {
       document.body.innerHTML = NewBillUI();
-      // Instance NewBill
+      
       const newBill = new NewBill({
         document,
         onNavigate,
@@ -63,7 +66,6 @@ describe("Given I am connected as an employee", () => {
         localStorage: window.localStorage,
       });
 
-      // Simulation chargement fichier
       const handleChangeDate = jest.fn(() => newBill.handleChangeDate);
       const inputDate = screen.getByTestId("datepicker");
 
@@ -76,16 +78,16 @@ describe("Given I am connected as an employee", () => {
 
       fireEvent.change(inputDate, {
         target: {
-          value: `2024-05-17`,
+          value: `2024-05-18`,
         },
       });
 
-      // Message erreur
       const error = screen.getByTestId("errorDate");
       expect(error).toBeTruthy();
     });
   });
 
+  // test lorsque le formulaire est correctement
   describe("When I submit the form completed", () => {
     test("Then the bill is created", async () => {
       const html = NewBillUI();
