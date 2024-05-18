@@ -73,14 +73,15 @@ describe("Given I am connected as an employee", () => {
 
       const today = new Date()
       const day = today.getDate()
-      const month = today.getMonth() + 1
+      let month = today.getMonth() + 1
       const year = today.getFullYear()
 
       // rajouter une condition pour month
+      month = month < 10 ? '0' + month : ''
 
       fireEvent.change(inputDate, {
         target: {
-          value: `${year.toString()}-${month.toString()}-${(day + 1).toString()}`,
+          value: `${year}-${month}-${(day + 1)}`,
         },
       });
       
