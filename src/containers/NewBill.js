@@ -49,14 +49,14 @@ export default class NewBill {
 
   displayErrorFile = error => {
     this.errorFile = true;
-      const inputFile = this.document.querySelector('#file')
-      if(!error) {
-        error = this.document.createElement('p')
-        error.textContent = 'Veuillez ajouter une image au format PNG, JPG ou JPEG'
-        error.classList.add('error-file')
-        error.setAttribute('data-testid', 'errorFile')
-        inputFile.after(error)
-      }
+    const inputFile = this.document.querySelector('#file')
+    if(!error) {
+      error = this.document.createElement('p')
+      error.textContent = 'Veuillez ajouter une image au format PNG, JPG ou JPEG'
+      error.classList.add('error-file')
+      error.setAttribute('data-testid', 'errorFile')
+      inputFile.after(error)
+    }
   }
  
   handleChangeFile = e => {
@@ -65,7 +65,8 @@ export default class NewBill {
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const extension = fileName.split('.').at(-1)
-    let error = this.document.querySelector('.error-file')
+    const error = this.document.querySelector('.error-file')
+
     if (this.EXTENSION_FILES.includes(extension)) {
       this.storeNewBill(error, file)
     } else {

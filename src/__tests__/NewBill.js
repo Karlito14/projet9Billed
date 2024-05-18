@@ -59,9 +59,39 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // test affichae message erreur lorsque l'utilisateur choisi une mauvaise date
+  // test lorque l'utilisateur choisit un fichier au format valide
+  describe("When I upload a file with valid format", () => {
+    test("then it errorFile is false", () => {
+      document.body.innerHTML = NewBillUI()
+  
+      const newBill = new NewBill({ 
+        document, 
+        onNavigate, 
+        store : mockStore, 
+        localStorage : window.localStorage 
+      })
+  
+      const handleChangeFile = jest.fn(newBill.handleChangeFile)
+      const inputFile = screen.getByTestId("file")
+  
+      inputFile.addEventListener("change", handleChangeFile)
+
+      fireEvent.change(inputFile, {
+        target: {
+          files: [
+            new File(["newBillImage.jpg"], "newBillImage.jpg", { type: "image/jpeg" })]
+          }
+      })
+
+      // Message erreur
+      const error = newBill.errorFile
+      expect(error).toBe(false)
+    })
+  })
+
+  // test affichage message erreur lorsque l'utilisateur choisi une mauvaise date
   describe("when I choose the wrong date", () => {
-    test("Then it should display an error message", () => {
+    test("Then it should display an error message, day error", () => {
       document.body.innerHTML = NewBillUI()
       
       const newBill = new NewBill({
@@ -81,7 +111,6 @@ describe("Given I am connected as an employee", () => {
       let month = today.getMonth() + 1
       const year = today.getFullYear()
 
-      // rajouter une condition pour month
       month = month < 10 ? '0' + month : month
       day = day < 10 ? '0' + day : day 
 
@@ -93,6 +122,34 @@ describe("Given I am connected as an employee", () => {
       
       const error = screen.getByTestId("errorDate")
       expect(error).toBeTruthy()
+    })
+  })
+
+  // test lorsqu'une bonne date est choisie
+  describe("when I choose the right date", () => {
+    test("Then it errorDate is false", () => {
+      document.body.innerHTML = NewBillUI()
+      
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: null,
+        localStorage: window.localStorage,
+      })
+
+      const handleChangeDate = jest.fn(() => newBill.handleChangeDate)
+      const inputDate = screen.getByTestId("datepicker")
+
+      inputDate.addEventListener("change", handleChangeDate)
+
+      fireEvent.change(inputDate, {
+        target: {
+          value: `2024-04-18`,
+        },
+      })
+      
+      const error = newBill.errorDate
+      expect(error).toBe(false)
     })
   })
 
