@@ -15,6 +15,7 @@ export default class Login {
     const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`)
     formAdmin.addEventListener("submit", this.handleSubmitAdmin)
   }
+  
   handleSubmitEmployee = e => {
     e.preventDefault()
     const user = {
@@ -59,6 +60,7 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   login = (user) => {
     if (this.store) {
       return this.store
@@ -74,6 +76,7 @@ export default class Login {
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   createUser = (user) => {
     if (this.store) {
       return this.store

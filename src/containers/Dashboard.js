@@ -146,11 +146,9 @@ export default class {
     if (this.counter === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`).html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter = 1
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`).html("")
-      this.counter = 0
     }
     
     bills.forEach(bill => {

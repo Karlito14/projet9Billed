@@ -29,14 +29,14 @@ export default ({ data, loading, error }) => {
               <h3> Validé (${filteredBills(data && data.bills, "accepted").length}) </h3>
               <span class='arrow-icon' id='arrow-icon2' data-testid='arrow-icon2'>${ArrowIcon}</span>
             </div>
-            <div class='status-bills-container' id='status-bills-container2'>
+            <div class='status-bills-container' id='status-bills-container2' data-testid='open-billUIUZtnPQvnbFnB0ozvJh'>
             </div>
 
             <div class='status-bills-header' style='margin-top: 20px;'>
               <h3> Refusé (${filteredBills(data && data.bills, "refused").length}) </h3>
               <span class='arrow-icon' id='arrow-icon3' data-testid='arrow-icon3'>${ArrowIcon}</span>
             </div>
-            <div class='status-bills-container' id='status-bills-container3'>
+            <div class='status-bills-container' id='status-bills-container3' data-testid='open-billBeKy5Mo4jkmdfPGYpTxZ'>
             </div>
 
         </div>

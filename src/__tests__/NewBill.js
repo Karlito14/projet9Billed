@@ -76,22 +76,23 @@ describe("Given I am connected as an employee", () => {
       const month = today.getMonth() + 1
       const year = today.getFullYear()
 
+      // rajouter une condition pour month
+
       fireEvent.change(inputDate, {
         target: {
-          value: `2024-05-18`,
+          value: `${year.toString()}-${month.toString()}-${(day + 1).toString()}`,
         },
       });
-
+      
       const error = screen.getByTestId("errorDate");
       expect(error).toBeTruthy();
     });
   });
 
-  // test lorsque le formulaire est correctement
+  // test lorsque le formulaire est correctement rempli
   describe("When I submit the form completed", () => {
     test("Then the bill is created", async () => {
-      const html = NewBillUI();
-      document.body.innerHTML = html;
+      document.body.innerHTML = NewBillUI();
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
@@ -100,6 +101,7 @@ describe("Given I am connected as an employee", () => {
       Object.defineProperty(window, "localStorage", {
         value: localStorageMock,
       });
+      
       window.localStorage.setItem(
         "user",
         JSON.stringify({
@@ -118,7 +120,7 @@ describe("Given I am connected as an employee", () => {
       const validBill = {
         type: "Restaurants et bars",
         name: "Vol Paris Londres",
-        date: "2022-02-15",
+        date: "2024-02-15",
         amount: 200,
         vat: 70,
         pct: 30,
