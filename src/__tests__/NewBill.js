@@ -62,6 +62,13 @@ describe("Given I am connected as an employee", () => {
   // test lorque l'utilisateur choisit un fichier au format valide
   describe("When I upload a file with valid format", () => {
     test("then it errorFile is false", () => {
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+          email: "azerty@email.com",
+        })
+      )
   
       const newBill = new NewBill({
 				document,
@@ -74,15 +81,15 @@ describe("Given I am connected as an employee", () => {
       const inputFile = screen.getByTestId("file")
 
       inputFile.addEventListener("change", handleChangeFile)
-
+      
       fireEvent.change(inputFile, {
         target: {
-          files: [new File(["test.jpg"], "test.jpg", { type: "image/jpg" })],
+          files: [new File(["test"], "test.jpg", { type: "image/jpg" })],
         },
       })
-
-			const errorVisible = newBill.errorFile
-			expect(errorVisible).toBe("false");
+      
+      const errorVisible = newBill.errorFile
+			expect(errorVisible).toBe(false);
     })
   })
 
@@ -106,6 +113,70 @@ describe("Given I am connected as an employee", () => {
       let day = today.getDate() + 1
       let month = today.getMonth() + 1
       const year = today.getFullYear()
+
+      month = month < 10 ? '0' + month : month
+      day = day < 10 ? '0' + day : day 
+
+      fireEvent.change(inputDate, {
+        target: {
+          value: `${year}-${month}-${day}`,
+        },
+      })
+      
+      const error = screen.getByTestId("errorDate")
+      expect(error).toBeTruthy()
+    })
+
+    test("Then it should display an error message, month error", () => {
+      
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: mockStore,
+        localStorage: window.localStorage,
+      })
+
+      const handleChangeDate = jest.fn(() => newBill.handleChangeDate)
+      const inputDate = screen.getByTestId("datepicker")
+
+      inputDate.addEventListener("change", handleChangeDate)
+
+      const today = new Date()
+      let day = today.getDate() 
+      let month = today.getMonth() + 2
+      const year = today.getFullYear()
+
+      month = month < 10 ? '0' + month : month
+      day = day < 10 ? '0' + day : day 
+
+      fireEvent.change(inputDate, {
+        target: {
+          value: `${year}-${month}-${day}`,
+        },
+      })
+      
+      const error = screen.getByTestId("errorDate")
+      expect(error).toBeTruthy()
+    })
+
+    test("Then it should display an error message, year error", () => {
+      
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: mockStore,
+        localStorage: window.localStorage,
+      })
+
+      const handleChangeDate = jest.fn(() => newBill.handleChangeDate)
+      const inputDate = screen.getByTestId("datepicker")
+
+      inputDate.addEventListener("change", handleChangeDate)
+
+      const today = new Date()
+      let day = today.getDate() 
+      let month = today.getMonth() + 1
+      const year = today.getFullYear() + 1
 
       month = month < 10 ? '0' + month : month
       day = day < 10 ? '0' + day : day 
@@ -207,7 +278,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // 
+  // test d'intégration POST new bill
   describe("Given I am a user connected as Employee", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")

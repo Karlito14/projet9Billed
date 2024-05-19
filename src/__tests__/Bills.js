@@ -124,7 +124,7 @@ describe("Given I am connected as an employee", () => {
   })
 })
 
-//Récupère les factures à partir de l'API GET fictive
+// test d'intégration GET
 describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills", () => {
     beforeEach(() => {

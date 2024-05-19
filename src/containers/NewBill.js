@@ -62,8 +62,7 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
+    const fileName = file.name
     const extension = fileName.split('.').at(-1)
     const error = this.document.querySelector('.error-file')
 
