@@ -13,17 +13,18 @@ import router from "../app/Router.js"
 
 jest.mock("../app/Store", () => mockStore) 
 
+beforeEach(() => {
+	document.body.innerHTML = NewBillUI();
+})
+
 const onNavigate = (pathname) => {
   document.body.innerHTML = ROUTES({ pathname })
 }
-
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
     // test affichage page nouvelle note de frais
     test("Then the newBill should be render", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
       //to-do write assertion
       expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy()
     })
@@ -32,12 +33,11 @@ describe("Given I am connected as an employee", () => {
   // test affichage message d'erreur lorsque l'utilisateur choisi un fichier avec la mauvaise extension
   describe("When I upload a file with invalid format", () => {
     test("Then it should display an error message", () => {
-      document.body.innerHTML = NewBillUI()
       // Instance NewBill
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: null,
+        store: mockStore,
         localStorage: window.localStorage,
       })
 
@@ -62,42 +62,38 @@ describe("Given I am connected as an employee", () => {
   // test lorque l'utilisateur choisit un fichier au format valide
   describe("When I upload a file with valid format", () => {
     test("then it errorFile is false", () => {
-      document.body.innerHTML = NewBillUI()
   
-      const newBill = new NewBill({ 
-        document, 
-        onNavigate, 
-        store : mockStore, 
-        localStorage : window.localStorage 
-      })
-  
-      const handleChangeFile = jest.fn(newBill.handleChangeFile)
+      const newBill = new NewBill({
+				document,
+				onNavigate,
+				store: mockStore,
+				localStorage: window.localStorage,
+			});
+
+			const handleChangeFile = jest.fn(() => newBill.handleChangeFile)
       const inputFile = screen.getByTestId("file")
-  
+
       inputFile.addEventListener("change", handleChangeFile)
 
       fireEvent.change(inputFile, {
         target: {
-          files: [
-            new File(["newBillImage.jpg"], "newBillImage.jpg", { type: "image/jpeg" })]
-          }
+          files: [new File(["test.jpg"], "test.jpg", { type: "image/jpg" })],
+        },
       })
 
-      // Message erreur
-      const error = newBill.errorFile
-      expect(error).toBe(false)
+			const errorVisible = newBill.errorFile
+			expect(errorVisible).toBe("false");
     })
   })
 
   // test affichage message erreur lorsque l'utilisateur choisi une mauvaise date
   describe("when I choose the wrong date", () => {
     test("Then it should display an error message, day error", () => {
-      document.body.innerHTML = NewBillUI()
       
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: null,
+        store: mockStore,
         localStorage: window.localStorage,
       })
 
@@ -128,12 +124,11 @@ describe("Given I am connected as an employee", () => {
   // test lorsqu'une bonne date est choisie
   describe("when I choose the right date", () => {
     test("Then it errorDate is false", () => {
-      document.body.innerHTML = NewBillUI()
       
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: null,
+        store: mockStore,
         localStorage: window.localStorage,
       })
 
@@ -155,12 +150,7 @@ describe("Given I am connected as an employee", () => {
 
   // test lorsque le formulaire est correctement rempli
   describe("When I submit the form completed", () => {
-    test("Then the bill is created", async () => {
-      document.body.innerHTML = NewBillUI()
-
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
+    test("Then the bill is created", () => {
 
       Object.defineProperty(window, "localStorage", {
         value: localStorageMock,
@@ -177,7 +167,7 @@ describe("Given I am connected as an employee", () => {
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: null,
+        store: mockStore,
         localStorage: window.localStorage,
       })
 
@@ -227,7 +217,8 @@ describe("Given I am connected as an employee", () => {
       root.setAttribute("id", "root")
       document.body.append(root)
       router()
-      })
+    })
+
     describe("When I navigate to newBill", () => {
       // Nouvelle facture
       test("promise from mock API POST returns object bills with correct values", async () => {

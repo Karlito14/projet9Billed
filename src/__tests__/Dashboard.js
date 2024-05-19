@@ -257,7 +257,10 @@ describe("Given I am a user connected as Admin", () => {
       expect(contentRefused).toBeTruthy()
       expect(screen.getByTestId("big-billed-icon")).toBeTruthy()
     })
+  })
+
   describe("When an error occurs on API", () => {
+
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
       Object.defineProperty(
@@ -269,11 +272,13 @@ describe("Given I am a user connected as Admin", () => {
         type: 'Admin',
         email: "a@a"
       }))
+
       const root = document.createElement("div")
       root.setAttribute("id", "root")
       document.body.appendChild(root)
       router()
     })
+
     test("fetches bills from an API and fails with 404 message error", async () => {
 
       mockStore.bills.mockImplementationOnce(() => {
@@ -281,7 +286,9 @@ describe("Given I am a user connected as Admin", () => {
           list : () =>  {
             return Promise.reject(new Error("Erreur 404"))
           }
-        }})
+        }
+      })
+
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 404/)
@@ -295,15 +302,14 @@ describe("Given I am a user connected as Admin", () => {
           list : () =>  {
             return Promise.reject(new Error("Erreur 500"))
           }
-        }})
+        }
+      })
 
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 500/)
       expect(message).toBeTruthy()
     })
-  })
-
   })
 })
 
