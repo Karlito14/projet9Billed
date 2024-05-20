@@ -22,24 +22,28 @@ describe('Given I am connected as an Admin', () => {
       expect(filtered_bills.length).toBe(1)
     })
   })
+
   describe('When I am on Dashboard page, there are bills, and there is one accepted', () => {
     test('Then, filteredBills by accepted status should return 1 bill', () => {
       const filtered_bills = filteredBills(bills, "accepted")
       expect(filtered_bills.length).toBe(1)
     })
   })
+
   describe('When I am on Dashboard page, there are bills, and there is two refused', () => {
     test('Then, filteredBills by accepted status should return 2 bills', () => {
       const filtered_bills = filteredBills(bills, "refused")
       expect(filtered_bills.length).toBe(2)
     })
   })
+
   describe('When I am on Dashboard page but it is loading', () => {
     test('Then, Loading page should be rendered', () => {
       document.body.innerHTML = DashboardUI({ loading: true })
       expect(screen.getAllByText('Loading...')).toBeTruthy()
     })
   })
+
   describe('When I am on Dashboard page but back-end send an error message', () => {
     test('Then, Error page should be rendered', () => {
       document.body.innerHTML = DashboardUI({ error: 'some error message' })
@@ -60,7 +64,7 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: mockStore, bills:bills, localStorage: window.localStorage
       })
       document.body.innerHTML = DashboardUI({ data: { bills } })
 
@@ -75,19 +79,20 @@ describe('Given I am connected as an Admin', () => {
       icon1.addEventListener('click', handleShowTickets1)
       userEvent.click(icon1)
       expect(handleShowTickets1).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`) )
-      expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy()
+      await waitFor(() => screen.getByTestId(`open-bill57qAXb6fIm2zOKkLzMro`) )
+      expect(screen.getByTestId(`open-bill57qAXb6fIm2zOKkLzMro`)).toBeTruthy()
+
       icon2.addEventListener('click', handleShowTickets2)
       userEvent.click(icon2)
       expect(handleShowTickets2).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`) )
-      expect(screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`)).toBeTruthy()
+      await waitFor(() => screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJg`) )
+      expect(screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJg`)).toBeTruthy()
 
       icon3.addEventListener('click', handleShowTickets3)
       userEvent.click(icon3)
       expect(handleShowTickets3).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`) )
-      expect(screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`)).toBeTruthy()
+      await waitFor(() => screen.getByTestId(`open-billBeKy6Mo4jkmdfPGYpTxZ`) )
+      expect(screen.getByTestId(`open-billBeKy6Mo4jkmdfPGYpTxZ`)).toBeTruthy()
     })
   })
 
@@ -104,16 +109,17 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: mockStore, bills:bills, localStorage: window.localStorage
       })
       document.body.innerHTML = DashboardUI({ data: { bills } })
+      
       const handleShowTickets1 = jest.fn((e) => dashboard.handleShowTickets(e, bills, 1))
       const icon1 = screen.getByTestId('arrow-icon1')
       icon1.addEventListener('click', handleShowTickets1)
       userEvent.click(icon1)
       expect(handleShowTickets1).toHaveBeenCalled()
-      expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy()
-      const iconEdit = screen.getByTestId('open-bill47qAXb6fIm2zOKkLzMro')
+      expect(screen.getByTestId(`open-bill57qAXb6fIm2zOKkLzMro`)).toBeTruthy()
+      const iconEdit = screen.getByTestId('open-bill57qAXb6fIm2zOKkLzMro')
       userEvent.click(iconEdit)
       expect(screen.getByTestId(`dashboard-form`)).toBeTruthy()
     })
@@ -132,7 +138,7 @@ describe('Given I am connected as an Admin', () => {
       }))
 
       const dashboard = new Dashboard({
-        document, onNavigate, store: null, bills:bills, localStorage: window.localStorage
+        document, onNavigate, store: mockStore, bills:bills, localStorage: window.localStorage
       })
       document.body.innerHTML = DashboardUI({ data: { bills } })
 
@@ -141,12 +147,13 @@ describe('Given I am connected as an Admin', () => {
       icon1.addEventListener('click', handleShowTickets1)
       userEvent.click(icon1)
       expect(handleShowTickets1).toHaveBeenCalled()
-      expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy()
-      const iconEdit = screen.getByTestId('open-bill47qAXb6fIm2zOKkLzMro')
+      expect(screen.getByTestId(`open-bill57qAXb6fIm2zOKkLzMro`)).toBeTruthy()
+      const iconEdit = screen.getByTestId('open-bill57qAXb6fIm2zOKkLzMro')
       userEvent.click(iconEdit)
       userEvent.click(iconEdit)
       const bigBilledIcon = screen.queryByTestId("big-billed-icon")
       expect(bigBilledIcon).toBeTruthy()
+
     })
   })
 

@@ -135,29 +135,28 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
+    e.preventDefault()
+    if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-
-    if ($(`#status-bills-container${this.index}`).html() !== '') {
-      this.counter = 1
-    } else {
-      this.counter = 0
-    }
-    
-    if (this.counter === 0) {
+    if (this.counter % 2 === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
-      $(`#status-bills-container${this.index}`).html(cards(filteredBills(bills, getStatus(this.index))))
+      $(`#status-bills-container${this.index}`)
+        .html(cards(filteredBills(bills, getStatus(this.index))))
+      this.counter ++
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
-      $(`#status-bills-container${this.index}`).html("")
+      $(`#status-bills-container${this.index}`)
+        .html("")
+      this.counter ++
     }
-    
+
     bills.forEach(bill => {
-      $(`#status-bills-container${this.index} > #open-bill${bill.id}`).click((e) => {
-        this.handleEditTicket(e, bill, bills)
-      })
+      $(`#open-bill${bill.id}`).off('click') // fix bug-4
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
     return bills
+
   }
 
   getBillsAllUsers = () => {
